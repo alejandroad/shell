@@ -2,17 +2,52 @@
 #include <cstdio>
 
 int main (int argc, char **argv) {
-    
+
     ush_loop();
 
     return EXIT_SUCCESS;
 }
 
+#define USH_TOK_BUFFISZE 64
+#define USH_TOK_DELIM " \t\r\n\a"
+char **ush_split_line(char *line) {
+    int buffsize = USH_TOK_BUFFISZE, pos = 0;
+    char **tokens = malloc(buffsize * sizeof(char*));
+    char *token;
+
+    // TODO Implement backslash, quoting, and escape sequencing.
+
+    if (!tokens) {
+        printf("ush_allocation_erorr in ush_split_line()")
+        exit(EXIT_FAILURE);
+    }
+
+    token = strtok(line, USH_TOK_DELIM);
+    while (token != NULL) {
+        tokens[pos] = token;
+        pos++;
+
+        if (pos >= buffsize) {
+            buffsize += USH_TOK_BUFFISZE;
+            tokens = realloc(tokens, buffsize * sizeof(char*));
+
+            if (!tokens) {
+                printf("ush_allocation_error in ush_split_line()")
+                exit(EXIT_FAILURE);
+            }
+        }
+
+        token = strtok(NULL, USH_TOK_DELIM);
+    }
+    tokens[pos] = NULL;
+    return tokens;
+}
+
 #define USH_BUFFSIZE 1024
-char* ush_read_line(void) {
+char *ush_read_line(void) {
     int buffsize = USH_BUFFSIZE;
     int pos = 0;
-    char* buffer = malloc(sizeof(char)*buffsize);
+    char *buffer = malloc(sizeof(char)*buffsize);
     int c;
 
     if (!buffer) {
