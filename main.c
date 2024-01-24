@@ -26,6 +26,18 @@ char* ush_read_line(void) {
         if (c == EOF || c == '\n') {
             buffer[pos] = '\0';
             return buffer;
+        } else {
+            buffer[pos] = c;
+        }
+        pos++;
+
+        if (pos >= buffsize) {
+            buffsize += USH_BUFFSIZE;
+            buffer = realloc(buffer, buffsize);
+            if (!buffer) {
+                printf("ush_allocation_error");
+                exit(EXIT_FAILURE);
+            }
         }
     }
 }
