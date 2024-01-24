@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <cstdio>
 
 int main (int argc, char **argv) {
     
@@ -14,7 +15,19 @@ char* ush_read_line(void) {
     char* buffer = malloc(sizeof(char)*buffsize);
     int c;
 
-    // TODO error handling and line reading
+    if (!buffer) {
+        printf("ush_allocation_error");
+        exit(EXIT_FAILURE);
+    }
+
+    while (1) {
+        c = getchar();
+
+        if (c == EOF || c == '\n') {
+            buffer[pos] = '\0';
+            return buffer;
+        }
+    }
 }
 
 void ush_loop(void) {
