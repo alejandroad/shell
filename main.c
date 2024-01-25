@@ -10,15 +10,19 @@ int main (int argc, char **argv) {
 
 int ush_launcher(char ** args) {
     pid_t pid = fork();
+    int status;
 
     if (pid == 0) {
        if (execvp(args[0], args) == -1) {
-        printf("ush_launcher_erorr: failed to load child")
+        perror("ush");
        }
+       exit(EXIT_FAILURE);
     } else if (pid > 0) {
-        // inside parent process 
+        do {
+            wpid = waitpid(pid, &status, WUNTRACED);
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
     } else {
-        // error
+        perror("ush")
     }
 }
 
