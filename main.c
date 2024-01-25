@@ -8,6 +8,20 @@ int main (int argc, char **argv) {
     return EXIT_SUCCESS;
 }
 
+int ush_launcher(char ** args) {
+    pid_t pid = fork();
+
+    if (pid == 0) {
+       if (execvp(args[0], args) == -1) {
+        printf("ush_launcher_erorr: failed to load child")
+       }
+    } else if (pid > 0) {
+        // inside parent process 
+    } else {
+        // error
+    }
+}
+
 #define USH_TOK_BUFFISZE 64
 #define USH_TOK_DELIM " \t\r\n\a"
 char **ush_split_line(char *line) {
@@ -78,8 +92,8 @@ char *ush_read_line(void) {
 }
 
 void ush_loop(void) {
-    char* line;
-    char** args;
+    char *line;
+    char **args;
     int status;
 
     do {
