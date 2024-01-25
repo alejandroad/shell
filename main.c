@@ -1,14 +1,7 @@
 #include <stdlib.h>
 #include <cstdio>
 
-int main (int argc, char **argv) {
-
-    ush_loop();
-
-    return EXIT_SUCCESS;
-}
-
-int ush_launcher(char ** args) {
+int ush_launcher(char **args) {
     pid_t pid = fork();
     int status;
 
@@ -109,4 +102,11 @@ void ush_loop(void) {
         free(line);
         free(args);
     } while (status);
+}
+
+int main (int argc, char **argv) {
+
+    ush_loop();
+
+    return EXIT_SUCCESS;
 }
