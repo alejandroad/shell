@@ -1,10 +1,13 @@
 #include <stdlib.h>
 #include <cstdio>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <string.h>
 
 
 /*
   Function Declarations for builtin shell commands:
- */
+*/
 int ush_cd(char **args);
 int ush_help(char **args);
 int ush_exit(char **args);
@@ -60,6 +63,22 @@ int ush_help(char **args) {
 
 int exit(char **args) {
     return 0;
+}
+
+int ush_execute(char **args) {
+    int i;
+
+    if (args[0] == NULL) {
+        // an empty command was entered
+        return 1;
+    }
+
+    for (i = 0; i < ush_num_builtins(); i++) {
+        if (strcmp(args[0], builtin_str[i]) == 0) {
+            return (*builtin_func[i])(args);
+        }
+    }
+    return ush_launcher(args);
 }
 
 int ush_launcher(char **args) {
